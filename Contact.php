@@ -11,17 +11,19 @@
 
  	public function __construct($nome,$fromEmail,$toEmail,
  		$assunto,$mensagemTexto){
- 		$this->nome = $nome;
+ 		$this->nome = $this->limparMensagem($nome);
  		$this->fromEmail = $fromEmail;
  		$this->toEmail = $toEmail;
- 		$this->assunto = $assunto;
- 		$this->mensagemTexto = $mensagemTexto;
+ 		$this->assunto = $this->limparMensagem($assunto);
+ 		$this->mensagemTexto = $this->limparMensagem($mensagemTexto);
 
  	}
 
  	public  function enviar(){
  	   $this->data_envio = date('d/m/Y');
 	   $this->hora_envio = date('H:i:s');
+
+
 	   $this->prepararMensagem();
 
 	   $headers  = "MIME-Version: 1.0 \n";
@@ -51,6 +53,31 @@
 			<p><strong>Data de envio: </strong>". $this->data_envio ."</p></br>
 			<p><strong>Hora da envio: </strong>". $this->hora_envio."</p> </br>");
  	}
+
+ 	public function limparMensagem($string){
+ 		$string = preg_replace('/[`^~\'"]/', null, iconv('UTF-8' , 'ASCII//TRANSLIT',
+		$string));
+		$string = strtolower($string);
+		$string = str_replace("  ", " ", $string);
+		$string = str_replace("---","-", $string);
+		$string = str_replace("(","-", $string);
+		$string = str_replace(")","-", $string);
+		$string = str_replace(".","-", $string);
+		$string = str_replace("&","-", $string);
+		$string = str_replace("%","-", $string);
+		$string = str_replace("|","-", $string);
+		$string = str_replace("=","-", $string);
+		$string = str_replace("#","-", $string);
+		$string = str_replace("/","-", $string);
+		$string = str_replace("+","-", $string);
+		$string = str_replace("_","-", $string);
+		$string = str_replace("*","-", $string);
+		$string = str_replace("$","-", $string);
+		$string = str_replace("@","-", $string);
+		$string  = trim($string);
+	return $string;
+	}
+
 
  	public function setNome($nome){
  		$this->nome = $nome;
