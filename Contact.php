@@ -11,18 +11,20 @@
 
  	public function __construct($nome,$fromEmail,$toEmail,
  		$assunto,$mensagemTexto){
- 		$this->nome = $this->limparMensagem($nome);
+ 		$this->nome = $nome;
  		$this->fromEmail = $fromEmail;
  		$this->toEmail = $toEmail;
- 		$this->assunto = $this->limparMensagem($assunto);
- 		$this->mensagemTexto = $this->limparMensagem($mensagemTexto);
+ 		$this->assunto = $assunto;
+ 		$this->mensagemTexto = $mensagemTexto;
 
  	}
 
  	public  function enviar(){
  	   $this->data_envio = date('d/m/Y');
 	   $this->hora_envio = date('H:i:s');
-
+	   $this->nome = $this->limparMensagem($this->nome);
+	   $this->assunto = $this->limparMensagem($this->assunto);
+	   $this->mensagemTexto = $this->limparMensagem($this->mensagemTexto);
 
 	   $this->prepararMensagem();
 
