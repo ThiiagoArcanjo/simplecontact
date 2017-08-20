@@ -20,27 +20,36 @@
  	}
 
  	public  function enviar(){
- 	   $this->data_envio = date('d/m/Y');
-	   $this->hora_envio = date('H:i:s');
-	   $this->nome = $this->limparMensagem($this->nome);
-	   $this->assunto = $this->limparMensagem($this->assunto);
-	   $this->mensagemTexto = $this->limparMensagem($this->mensagemTexto);
+ 		$this->setFromEmail($this->limparEspacos($this->fromEmail));
+ 		$this->setToEmail($this->limparEspacos($this->toEmail));
+ 		if($this->validarEmail($this->fromEmail) &&
+ 			$this->validarEmail($this->toEmail)){
 
-	   $this->prepararMensagem();
+	 	   $this->data_envio = date('d/m/Y');
+		   $this->hora_envio = date('H:i:s');
+		   $this->nome = $this->limparMensagem($this->nome);
+		   $this->assunto = $this->limparMensagem($this->assunto);
+		   $this->mensagemTexto = $this->limparMensagem($this->mensagemTexto);
 
-	   $headers  = "MIME-Version: 1.0 \n";
-	   $headers .= "Content-type: text/html; charset=iso-8859-1\n";
-       $headers .= "From: ". $this->getNome()." <". $this->getFromEmail().">";
-	   $enviaremail = @mail( $this->getToEmail(),
-	   		$this->getAssunto(),
-	   		$this->getMensagemFinal(), $headers);
+		   $this->prepararMensagem();
 
-	   if($enviaremail){
-			echo "<script>alert('Email enviado com Sucesso');</script>";
-			return TRUE;
+		   $headers  = "MIME-Version: 1.0 \n";
+		   $headers .= "Content-type: text/html; charset=iso-8859-1\n";
+	       $headers .= "From: ". $this->getNome()." <". $this->getFromEmail().">";
+		   $enviaremail = @mail( $this->getToEmail(),
+		   		$this->getAssunto(),
+		   		$this->getMensagemFinal(), $headers);
 
-  		} else {
-			echo "ERRO AO ENVIAR E-MAIL!";
+		   if($enviaremail){
+				echo "<script>alert('Email enviado com Sucesso');</script>";
+				return TRUE;
+
+	  		} else {
+				echo "ERRO AO ENVIAR E-MAIL!";
+				return FALSE;
+			}
+		}else{
+			echo "<script>alert('Email Invalido');</script>";
 			return FALSE;
 		}
 
@@ -78,6 +87,24 @@
 		$string = str_replace("@","-", $string);
 		$string  = trim($string);
 	return $string;
+	}
+
+	//fonte:http://blog.thiagobelem.net/quanto-cobrar-por-um-site
+	public function validarEmail($email){
+		$conta = '/^[a-zA-Z0-9\._-]+?@';
+		$domino = '[a-zA-Z0-9_-]+?\.';
+		$gTLD = '[a-zA-Z]{2,6}'; //.com; .coop; .gov; .museum; etc.
+		$ccTLD = '((\.[a-zA-Z]{2,4}){0,1})$/'; //.br; .us; .scot; etc.
+		$pattern = $conta.$domino.$gTLD.$ccTLD;
+		if (preg_match($pattern, $email)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function limparEspacos($string){
+		return trim($string);
 	}
 
 
