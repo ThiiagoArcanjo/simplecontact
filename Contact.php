@@ -89,7 +89,7 @@
 	return $string;
 	}
 
-	//fonte:http://blog.thiagobelem.net/quanto-cobrar-por-um-site
+	//fonte:http://blog.thiagobelem.net/validacao-de-e-mail-no-php-com-expressoes-regulares
 	public function validarEmail($email){
 		$conta = '/^[a-zA-Z0-9\._-]+?@';
 		$domino = '[a-zA-Z0-9_-]+?\.';
